@@ -731,36 +731,78 @@ button:hover {
     }
 }
 
-@media screen and (max-width: 768px) {
-    .burger {
-        display: block;
-    }
-
-    .hero {
-        background-position: center center;
-    }
-
-    .about-content,
-    .contact-content {
-        grid-template-columns: 1fr;
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+    .container {
+        padding: 0 15px;
     }
 
     .hero-content h1 {
-        font-size: 2.4rem;
-        letter-spacing: 0.5px;
+        font-size: 1.8rem;
     }
 
     .hero-content h2 {
-        font-size: 1.4rem;
-        letter-spacing: 0.3px;
+        font-size: 1.1rem;
+    }
+
+    .about-image img {
+        height: 500px;
+    }
+
+    .procedures-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .burger {
+        display: block;
+        cursor: pointer;
+    }
+
+    .nav-links {
+        position: fixed;
+        right: -100%;
+        top: 80px;
+        height: calc(100vh - 80px);
+        background-color: var(--color-beige);
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        transition: 0.5s;
+        padding: 2rem 0;
+        box-shadow: 0 2px 15px rgba(122, 107, 107, 0.1);
+    }
+
+    .nav-links li {
+        margin: 1.5rem 0;
+    }
+
+    .nav-links a {
+        font-size: 1.1rem;
+    }
+
+    .hero {
+        height: 100vh;
+        background-position: center;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
     }
 
     .about-image img {
         height: 400px;
     }
 
-    .instagram-content {
+    .procedures-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .instagram-content {
+        flex-direction: column;
         gap: 2rem;
     }
 
@@ -768,28 +810,55 @@ button:hover {
         text-align: center;
     }
 
-    .instagram-text h2 {
-        text-align: center;
-        font-size: 2rem;
+    .instagram-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        overflow-x: auto;
+        padding: 1rem 0;
+        -webkit-overflow-scrolling: touch;
     }
 
-    .instagram-text p {
+    .story-circle {
+        width: 80px;
+        height: 80px;
+    }
+
+    .story-text {
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .contact-info {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-content h2 {
         font-size: 1rem;
     }
 
-    .instagram-grid {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 0.8rem;
-        max-width: 100%;
-        padding: 0 0.5rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+    .hero-content p {
+        font-size: 0.9rem;
     }
 
-    .instagram-grid::-webkit-scrollbar {
-        display: none;
+    .cta-button {
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
+    }
+
+    .instagram-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .story-circle {
@@ -798,24 +867,65 @@ button:hover {
     }
 
     .story-text {
-        font-size: 0.7rem;
-        margin-top: 0.4rem;
-        white-space: nowrap;
+        font-size: 0.75rem;
+    }
+
+    .about-image img {
+        height: 300px;
+    }
+
+    .procedure-card {
+        padding: 1.5rem;
+    }
+
+    .procedure-card i {
+        font-size: 1.8rem;
+    }
+
+    .procedure-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .procedure-card p {
+        font-size: 0.9rem;
+    }
+
+    .contact-item p {
+        font-size: 0.9rem;
+    }
+
+    input, textarea {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 0.8rem 2rem;
     }
 }
 
-@media screen and (max-width: 480px) {
-    .instagram-grid {
-        gap: 0.6rem;
+/* Story Modal Responsive */
+@media screen and (max-width: 768px) {
+    .story-modal-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
     }
 
-    .story-circle {
-        width: 60px;
-        height: 60px;
+    .story-content {
+        height: calc(100vh - 60px);
     }
 
-    .story-text {
-        font-size: 0.65rem;
+    .story-content img,
+    .story-content video {
+        max-height: 100%;
+        width: auto;
+    }
+
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
     }
 }
 
