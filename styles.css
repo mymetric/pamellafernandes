@@ -499,21 +499,24 @@ button:hover {
 }
 
 .instagram-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     align-items: center;
+    text-align: center;
 }
 
 .instagram-text {
-    text-align: left;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .instagram-text h2 {
     font-size: 2.4rem;
     margin-bottom: 1rem;
     color: var(--color-text);
-    text-align: left;
+    text-align: center;
 }
 
 .instagram-text p {
@@ -521,35 +524,6 @@ button:hover {
     color: var(--color-text-light);
     margin-bottom: 2rem;
     line-height: 1.6;
-}
-
-.instagram-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    background-color: var(--color-accent);
-    color: var(--color-beige);
-    text-decoration: none;
-    border-radius: 50px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(196, 165, 160, 0.2);
-}
-
-.instagram-link:hover {
-    transform: translateY(-3px);
-    background-color: var(--color-text);
-    box-shadow: 0 6px 25px rgba(196, 165, 160, 0.3);
-}
-
-.instagram-link i {
-    font-size: 1.3rem;
-}
-
-.instagram-link span {
-    font-weight: 500;
-    letter-spacing: 0.5px;
 }
 
 .instagram-grid {
@@ -560,6 +534,7 @@ button:hover {
     max-width: 800px;
     margin: 0 auto;
     padding-top: 20px;
+    width: 100%;
 }
 
 .instagram-story {
@@ -569,10 +544,7 @@ button:hover {
     gap: 0.6rem;
     cursor: pointer;
     transition: transform 0.3s ease;
-}
-
-.instagram-story:hover {
-    transform: translateY(-5px);
+    width: 100%;
 }
 
 .story-circle {
@@ -583,6 +555,7 @@ button:hover {
     background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
     position: relative;
     transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
 .story-circle::before {
@@ -617,6 +590,10 @@ button:hover {
     font-weight: 500;
     text-align: center;
     transition: color 0.3s ease;
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 100px;
 }
 
 .instagram-story:hover .story-text {
@@ -802,21 +779,31 @@ button:hover {
     }
 
     .instagram-content {
-        flex-direction: column;
         gap: 2rem;
     }
 
-    .instagram-text {
-        text-align: center;
-    }
-
     .instagram-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
+        display: flex;
+        flex-direction: row;
         overflow-x: auto;
+        gap: 1rem;
         padding: 1rem 0;
         -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        width: 100%;
+    }
+
+    .instagram-grid::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+    .instagram-story {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        width: 100px;
+        min-width: 100px;
     }
 
     .story-circle {
@@ -827,6 +814,9 @@ button:hover {
     .story-text {
         font-size: 0.8rem;
         margin-top: 0.5rem;
+        white-space: normal;
+        word-wrap: break-word;
+        max-width: 90px;
     }
 
     .contact-content {
@@ -857,8 +847,9 @@ button:hover {
         font-size: 0.9rem;
     }
 
-    .instagram-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .instagram-story {
+        width: 90px;
+        min-width: 90px;
     }
 
     .story-circle {
@@ -868,6 +859,7 @@ button:hover {
 
     .story-text {
         font-size: 0.75rem;
+        max-width: 80px;
     }
 
     .about-image img {
@@ -1069,25 +1061,127 @@ section h2::after {
     font-size: 1.2em;
 }
 
-/* WhatsApp Widget Overrides */
-.close-btn {
-    width: auto !important;
-    height: auto !important;
-    padding: 8px !important;
-    background: none !important;
-    border-radius: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    color: var(--color-text) !important;
-    font-size: 20px !important;
-    cursor: pointer !important;
-    z-index: 1001 !important;
+/* WhatsApp Button */
+.whatsapp-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
 }
 
-.close-btn:hover {
-    background: none !important;
+.whatsapp-button.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.whatsapp-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    color: white;
+}
+
+@media screen and (max-width: 768px) {
+    .whatsapp-button {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .whatsapp-button {
+        bottom: 15px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+}
+
+/* Remove WhatsApp Widget Overrides */
+.close-btn {
+    display: none;
+}
+
+/* WhatsApp Message Notification */
+.whatsapp-message {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background-color: #25D366;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    max-width: 300px;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.whatsapp-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media screen and (max-width: 768px) {
+    .whatsapp-message {
+        bottom: 80px;
+        right: 20px;
+        left: 20px;
+        max-width: none;
+    }
+}
+
+/* Form Buttons */
+.form-buttons {
+    width: 100%;
+}
+
+.form-buttons button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.whatsapp-form-button {
+    background-color: #25D366 !important;
+}
+
+.whatsapp-form-button:hover {
+    background-color: #128C7E !important;
+}
+
+.whatsapp-form-button i {
+    font-size: 1.2rem;
+}
+
+@media screen and (max-width: 480px) {
+    .form-buttons {
+        width: 100%;
+    }
 } 

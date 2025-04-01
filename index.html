@@ -9,6 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Meta Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        
+        fbq('init', '1849485215484475');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1849485215484475&ev=PageView&noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 <body>
     <header>
@@ -195,9 +214,14 @@
                     </div>
                     <form id="contact-form">
                         <input type="text" placeholder="Nome" required>
-                        <input type="email" placeholder="E-mail" required>
-                        <textarea placeholder="Mensagem" required></textarea>
-                        <button type="submit">Enviar Mensagem</button>
+                        <input type="tel" placeholder="Telefone" required pattern="[0-9]{2}[0-9]{5}[0-9]{4}">
+                        <textarea placeholder="Mensagem (opcional)"></textarea>
+                        <div class="form-buttons">
+                            <button type="button" class="whatsapp-form-button">
+                                <i class="fab fa-whatsapp"></i>
+                                Enviar Mensagem
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -223,56 +247,14 @@
         </div>
     </footer>
 
+    <a href="#contato" class="whatsapp-button">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="whatsapp-message">
+        Para entrar em contato via WhatsApp, por favor preencha o formulário primeiro.
+    </div>
+
     <script src="script.js"></script>
-    <script>
-        // Configuração do widget
-        var widgetConfig = {
-            title: 'Atendimento',
-            whatsapp: {
-                number: '5531992251502',
-                message: 'Olá! Gostaria de agendar uma consulta.'
-            },
-            initialization: {
-                mode: ['button'],
-                createButton: true
-            },
-            colors: {
-                primary: { gradient: 'linear-gradient(135deg, var(--color-accent), var(--color-text))', solid: 'var(--color-accent)', hover: 'var(--color-text)' },
-                secondary: { gradient: 'linear-gradient(135deg, var(--color-accent), var(--color-text))', solid: 'var(--color-accent)', hover: 'var(--color-text)' },
-                text: { primary: 'var(--color-beige)', secondary: 'var(--color-text-light)', title: 'var(--color-text)' },
-                background: { primary: 'var(--color-nude-light)', secondary: 'var(--color-beige)', overlay: 'rgba(122, 107, 107, 0.5)' },
-                shadow: { primary: 'rgba(196, 165, 160, 0.3)', hover: 'rgba(196, 165, 160, 0.4)' }
-            },
-            popup: {
-                position: {
-                    desktop: { horizontal: 'right', vertical: 'bottom', margin: '110px', overlay: 'none' },
-                    mobile: { horizontal: 'center', vertical: 'center', margin: '0', overlay: 'rgba(0, 0, 0, 0.5)' }
-                }
-            },
-            welcome: {
-                emoji: '',
-                title: 'Precisa de ajuda?',
-                message: 'Converse com a Dra. Pâmella!',
-                subMessage: 'Preencha os dados abaixo para começar.',
-                attendant: {
-                    image: 'images/sobre.jpg'
-                }
-            },
-            fields: {
-                name: { enabled: true, label: 'Nome', placeholder: 'Digite seu nome', required: true },
-                email: { enabled: true, label: 'Email', placeholder: 'Digite seu email', required: true },
-                phone: { enabled: true, label: 'Telefone', placeholder: '(XX) XXXXX-XXXX', required: true }
-            }
-        };
-        
-        // Carregar o script dinamicamente
-        var script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/gh/mymetric/scripts@main/whatsapp_widget/script.js';
-        
-        script.onload = function () {
-            window.initWidget(widgetConfig);
-        };
-        document.body.appendChild(script);
-    </script>
 </body>
 </html> 

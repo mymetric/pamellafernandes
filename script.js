@@ -217,4 +217,103 @@ if (contactForm) {
         alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
         contactForm.reset();
     });
-} 
+}
+
+// Formatação do telefone
+document.querySelector('input[type="tel"]').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    
+    if (value.length > 2) {
+        value = `(${value.slice(0,2)}) ${value.slice(2)}`;
+    }
+    if (value.length > 10) {
+        value = `${value.slice(0,10)}-${value.slice(10)}`;
+    }
+    
+    e.target.value = value;
+});
+
+// Função para formatar e abrir WhatsApp
+function openWhatsApp(nome, telefone, mensagem) {
+    const mensagemWhatsApp = `Olá! Me chamo ${nome}.\nTelefone: ${telefone}${mensagem ? `\n\n${mensagem}` : ''}`;
+    
+    // Disparar evento de Lead no Meta Pixel com Advanced Match
+    fbq('track', 'Lead', {
+        content_name: 'Formulário de Contato',
+        content_category: 'Contato',
+        value: 1,
+        currency: 'BRL',
+        phone: telefone.replace(/\D/g, ''),
+        external_id: telefone.replace(/\D/g, ''),
+        client_ip_address: '{{client_ip_address}}',
+        client_user_agent: '{{client_user_agent}}',
+        fbc: '{{fbc}}',
+        fbp: '{{fbp}}',
+        em: '{{em}}',
+        external_id: telefone.replace(/\D/g, ''),
+        phone: telefone.replace(/\D/g, ''),
+        client_ip_address: '{{client_ip_address}}',
+        client_user_agent: '{{client_user_agent}}',
+        fbc: '{{fbc}}',
+        fbp: '{{fbp}}',
+        em: '{{em}}'
+    });
+
+    window.open(`https://wa.me/5531992251502?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
+}
+
+// Envio do formulário para WhatsApp
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nome = this.querySelector('input[type="text"]').value;
+    const telefone = this.querySelector('input[type="tel"]').value.replace(/\D/g, '');
+    const mensagem = this.querySelector('textarea').value.trim();
+    
+    openWhatsApp(nome, telefone, mensagem);
+    this.reset();
+});
+
+// Botão WhatsApp no formulário
+document.querySelector('.whatsapp-form-button').addEventListener('click', function() {
+    const form = document.getElementById('contact-form');
+    const nome = form.querySelector('input[type="text"]').value;
+    const telefone = form.querySelector('input[type="tel"]').value.replace(/\D/g, '');
+    const mensagem = form.querySelector('textarea').value.trim();
+    
+    if (!nome || !telefone) {
+        alert('Por favor, preencha pelo menos o nome e telefone antes de ir para o WhatsApp.');
+        return;
+    }
+    
+    openWhatsApp(nome, telefone, mensagem);
+});
+
+// WhatsApp Button Scroll Control
+const whatsappButton = document.querySelector('.whatsapp-button');
+
+window.addEventListener('scroll', function() {
+    if (window.scrollY > 200) {
+        whatsappButton.classList.add('show');
+    } else {
+        whatsappButton.classList.remove('show');
+    }
+});
+
+// Smooth scroll for WhatsApp button
+document.querySelector('.whatsapp-button').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('#contato').scrollIntoView({
+        behavior: 'smooth'
+    });
+
+    // Show message
+    const message = document.querySelector('.whatsapp-message');
+    message.classList.add('show');
+
+    // Hide message after 5 seconds
+    setTimeout(() => {
+        message.classList.remove('show');
+    }, 5000);
+}); 
