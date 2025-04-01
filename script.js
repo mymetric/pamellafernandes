@@ -1,29 +1,29 @@
 // Stories data
 const stories = {
     'mamas-nunca-caem': {
-        video: 'images/mamas-nao-caem.mp4',
+        video: 'https://streamable.com/e/4ych60',
         title: 'Mamas que Nunca Caem',
-        type: 'video'
+        type: 'streamable-video'
     },
     'assimetria-mamaria': {
-        video: 'images/assimetria-mamaria.mp4',
+        video: 'https://streamable.com/g6mk7q',
         title: 'Assimetria Mamária',
-        type: 'video'
+        type: 'streamable-video'
     },
     'como-vejo-a-plastica': {
-        video: 'images/como-vejo-a-plastica.mp4',
+        video: 'https://streamable.com/e/bro38v',
         title: 'Como Vejo a Plástica',
-        type: 'video'
+        type: 'streamable-video'
     },
     'preparacao-plastica': {
-        video: 'images/preparacao-plastica.mp4',
+        video: 'https://streamable.com/e/5j3qx0',
         title: 'Preparação para Cirurgia',
-        type: 'video'
+        type: 'streamable-video'
     },
     'ritdo': {
-        video: 'images/ritdo.mp4',
+        video: 'https://streamable.com/e/efpymi',
         title: 'Sobre Ritidoplastia',
-        type: 'video'
+        type: 'streamable-video'
     },
     'antes-depois': {
         image: 'https://images.unsplash.com/photo-1554464901-78c9215b7e61?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -71,6 +71,46 @@ function showStory(storyId) {
         video.style.height = '100%';
         video.style.objectFit = 'contain';
         storyContent.appendChild(video);
+    } else if (story.type === 'streamable-video') {
+        const container = document.createElement('div');
+        container.style.position = 'relative';
+        container.style.width = '100%';
+        container.style.height = '0px';
+        container.style.paddingBottom = '177.778%';
+        
+        const iframe = document.createElement('iframe');
+        // Use the correct video ID based on the story
+        let videoId;
+        switch(storyId) {
+            case 'mamas-nunca-caem':
+                videoId = '4ych60';
+                break;
+            case 'assimetria-mamaria':
+                videoId = 'g6mk7q';
+                break;
+            case 'como-vejo-a-plastica':
+                videoId = 'bro38v';
+                break;
+            case 'preparacao-plastica':
+                videoId = '5j3qx0';
+                break;
+            case 'ritdo':
+                videoId = 'efpymi';
+                break;
+        }
+        iframe.src = `https://streamable.com/e/${videoId}?autoplay=1&loop=0&nocontrols=1`;
+        iframe.allow = 'fullscreen;autoplay';
+        iframe.allowFullscreen = true;
+        iframe.style.border = 'none';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.position = 'absolute';
+        iframe.style.left = '0px';
+        iframe.style.top = '0px';
+        iframe.style.overflow = 'hidden';
+        
+        container.appendChild(iframe);
+        storyContent.appendChild(container);
     } else {
         const img = document.createElement('img');
         img.src = story.image;
@@ -94,6 +134,11 @@ function closeStoryModal() {
     const video = document.querySelector('.story-content video');
     if (video) {
         video.pause();
+    }
+    // Remove iframe if exists
+    const iframe = document.querySelector('.story-content iframe');
+    if (iframe) {
+        iframe.remove();
     }
 }
 
