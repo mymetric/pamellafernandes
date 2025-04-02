@@ -270,6 +270,13 @@ async function openWhatsApp(nome, telefone, mensagem) {
         em: '{{em}}'
     });
 
+    // Disparar evento no Google Analytics
+    gtag('event', 'form_submission', {
+        'event_category': 'Contact',
+        'event_label': 'WhatsApp Form',
+        'value': 1
+    });
+
     window.open(`https://wa.me/5531992251502?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
 }
 
