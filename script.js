@@ -235,8 +235,25 @@ document.querySelector('input[type="tel"]').addEventListener('input', function(e
 });
 
 // Função para formatar e abrir WhatsApp
-function openWhatsApp(nome, telefone, mensagem) {
+async function openWhatsApp(nome, telefone, mensagem) {
     const mensagemWhatsApp = `Olá! Me chamo ${nome}.\nTelefone: ${telefone}${mensagem ? `\n\n${mensagem}` : ''}`;
+    
+    // Enviar dados para o Discord
+    const webhookUrl = 'https://discord.com/api/webhooks/1356766178495955284/4yvQWHpDJ8ExZMsoA8xlJ0rOrsrPhJJ6GVOJjvSKBzF5CuTJLBEjYwve-D3550sOjYtn';
+    
+    try {
+        await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: `**Novo Contato via Formulário**\n\n**Nome:** ${nome}\n**Telefone:** ${telefone}${mensagem ? `\n**Mensagem:** ${mensagem}` : ''}`
+            })
+        });
+    } catch (error) {
+        console.error('Erro ao enviar dados para o Discord:', error);
+    }
     
     // Disparar evento de Lead no Meta Pixel com Advanced Match
     fbq('track', 'Lead', {
@@ -246,13 +263,6 @@ function openWhatsApp(nome, telefone, mensagem) {
         currency: 'BRL',
         phone: telefone.replace(/\D/g, ''),
         external_id: telefone.replace(/\D/g, ''),
-        client_ip_address: '{{client_ip_address}}',
-        client_user_agent: '{{client_user_agent}}',
-        fbc: '{{fbc}}',
-        fbp: '{{fbp}}',
-        em: '{{em}}',
-        external_id: telefone.replace(/\D/g, ''),
-        phone: telefone.replace(/\D/g, ''),
         client_ip_address: '{{client_ip_address}}',
         client_user_agent: '{{client_user_agent}}',
         fbc: '{{fbc}}',
