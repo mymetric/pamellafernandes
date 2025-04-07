@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 :root {
@@ -17,11 +19,26 @@
 }
 
 body {
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Poppins', sans-serif;
     line-height: 1.6;
-    color: var(--color-text);
-    background-color: var(--color-beige);
-    letter-spacing: 0.3px;
+    color: #333;
+    background-color: #fff;
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+    width: 100%;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    z-index: -1;
+    pointer-events: none;
 }
 
 .container {
@@ -98,21 +115,20 @@ nav {
 
 /* Hero Section */
 .hero {
+    position: relative;
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero.jpg');
-    background-color: #000; /* Fallback color */
-    background-position: center;
-    background-repeat: no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('images/hero.jpg');
     background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     text-align: center;
     color: white;
-    position: relative;
+    overflow: hidden;
+    padding-bottom: 80px;
 }
 
 .hero::before {
@@ -120,9 +136,9 @@ nav {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
     z-index: 1;
 }
 
@@ -131,6 +147,7 @@ nav {
     z-index: 2;
     max-width: 800px;
     padding: 0 20px;
+    margin-bottom: 20px;
 }
 
 .hero-content h1 {
@@ -206,8 +223,21 @@ nav {
 
 /* About Section */
 .about {
-    padding: 5rem 0;
-    background-color: var(--color-nude-light);
+    background-color: #fff;
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+    z-index: -1;
 }
 
 .about h2 {
@@ -240,8 +270,21 @@ nav {
 
 /* Education Section */
 .education {
-    padding: 5rem 0;
-    background-color: var(--color-beige);
+    background-color: #f8f9fa;
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.education::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    z-index: -1;
 }
 
 .education h2 {
@@ -278,12 +321,10 @@ nav {
 
 /* Procedures Section */
 .procedures {
-    padding: 5rem 0;
-    background: linear-gradient(rgba(253, 248, 249, 0.95), rgba(253, 248, 249, 0.95)), url('https://images.unsplash.com/photo-1554464901-78c9215b7e61?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #fff;
+    padding: 80px 0;
     position: relative;
+    overflow: hidden;
 }
 
 .procedures::before {
@@ -291,15 +332,10 @@ nav {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, rgba(253, 248, 249, 0.97), rgba(253, 248, 249, 0.97));
-    z-index: 1;
-}
-
-.procedures .container {
-    position: relative;
-    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+    z-index: -1;
 }
 
 .procedures h2 {
@@ -354,12 +390,10 @@ nav {
 
 /* Contact Section */
 .contact {
-    padding: 5rem 0;
-    background: linear-gradient(rgba(253, 248, 249, 0.97), rgba(253, 248, 249, 0.97)), url('https://images.unsplash.com/photo-1554464901-78c9215b7e61?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #f8f9fa;
+    padding: 80px 0;
     position: relative;
+    overflow: hidden;
 }
 
 .contact::before {
@@ -367,10 +401,10 @@ nav {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, rgba(253, 248, 249, 0.98), rgba(253, 248, 249, 0.98));
-    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    z-index: -1;
 }
 
 .contact .container {
@@ -475,16 +509,10 @@ button:hover {
 
 /* Instagram Section */
 .instagram {
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('images/instagram-bg.jpg');
-    background-color: #000; /* Fallback color */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+    background-color: #f8f9fa;
     padding: 80px 0;
     position: relative;
+    overflow: hidden;
 }
 
 .instagram::before {
@@ -492,15 +520,23 @@ button:hover {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
-    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    z-index: -1;
+}
+
+.instagram .container {
+    position: relative;
+    z-index: 2;
 }
 
 .instagram-content {
-    position: relative;
-    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    text-align: center;
 }
 
 .instagram-text {
@@ -553,6 +589,10 @@ button:hover {
     position: relative;
     transition: transform 0.3s ease;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .story-circle::before {
@@ -579,6 +619,9 @@ button:hover {
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid white;
+    display: block;
+    position: relative;
+    z-index: 1;
 }
 
 .story-text {
@@ -801,11 +844,25 @@ button:hover {
         scroll-snap-align: start;
         width: 100px;
         min-width: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .story-circle {
         width: 80px;
         height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .story-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
     }
 
     .story-text {
@@ -920,12 +977,23 @@ button:hover {
 
 /* Footer */
 footer {
-    background-color: var(--color-text);
-    color: var(--color-nude-light);
-    padding: 2.5rem 0;
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
     text-align: center;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #333333 0%, #222222 100%);
+    z-index: -1;
 }
 
 /* Mobile Navigation */
