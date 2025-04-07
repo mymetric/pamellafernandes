@@ -99,18 +99,20 @@ nav {
 /* Hero Section */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(122, 107, 107, 0.05), rgba(122, 107, 107, 0.1)), url('images/hero.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero.jpg');
+    background-color: #000; /* Fallback color */
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: cover;
-    background-position: 85% center;
-    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     text-align: center;
-    color: var(--color-beige);
-    padding-top: 80px;
+    color: white;
     position: relative;
-    overflow: hidden;
 }
 
 .hero::before {
@@ -120,18 +122,15 @@ nav {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, rgba(122, 107, 107, 0.05), rgba(122, 107, 107, 0.1));
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
     z-index: 1;
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
-    width: 100%;
-    padding: 2rem;
-    background-color: rgba(122, 107, 107, 0.02);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    margin-bottom: 0;
+    max-width: 800px;
+    padding: 0 20px;
 }
 
 .hero-content h1 {
@@ -476,10 +475,16 @@ button:hover {
 
 /* Instagram Section */
 .instagram {
-    padding: 6rem 0;
-    background-color: var(--color-nude-light);
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('images/instagram-bg.jpg');
+    background-color: #000; /* Fallback color */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    padding: 80px 0;
     position: relative;
-    overflow: hidden;
 }
 
 .instagram::before {
@@ -489,21 +494,13 @@ button:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(253, 248, 249, 0.95), rgba(253, 248, 249, 0.98));
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
     z-index: 1;
 }
 
-.instagram .container {
+.instagram-content {
     position: relative;
     z-index: 2;
-}
-
-.instagram-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-    text-align: center;
 }
 
 .instagram-text {
