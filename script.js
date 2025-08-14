@@ -277,7 +277,7 @@ async function openWhatsApp(nome, telefone, mensagem) {
         'value': 1
     });
 
-    window.open(`https://wa.me/55319993991313?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
+    window.open(`https://wa.me/5531993991313?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
 }
 
 // Envio do formulário para WhatsApp
