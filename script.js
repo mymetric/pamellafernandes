@@ -277,6 +277,13 @@ async function openWhatsApp(nome, telefone, mensagem) {
         'value': 1
     });
 
+    // Disparar conversão do Google Ads
+    gtag('event', 'conversion', {
+        'send_to': 'AW-17210029785/lead',
+        'value': 1,
+        'currency': 'BRL'
+    });
+
     window.open(`https://wa.me/5531993991313?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
 }
 
