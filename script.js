@@ -284,7 +284,7 @@ async function openWhatsApp(nome, telefone, mensagem) {
         'currency': 'BRL'
     });
 
-    window.open(`https://wa.me/5531993991313?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
+    window.open(`https://wa.me/5531990005148?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
 }
 
 // Envio do formulário para WhatsApp
