@@ -207,137 +207,369 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Form Submission
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Here you would typically handle the form submission
-        // For now, we'll just show an alert
-        alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-        contactForm.reset();
-    });
-}
+// WhatsApp Floating Button with Chat Modal
+(function() {
+  var button = document.createElement('button');
+  button.innerHTML = '<img src="https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png" style="width:36px;height:36px;">';
+  button.style.cssText = [
+    'position: fixed;',
+    'bottom: 20px;',
+    'right: 20px;',
+    'width: 64px;',
+    'height: 64px;',
+    'border-radius: 50%;',
+    'background: #25D366;',
+    'border: none;',
+    'cursor: pointer;',
+    'box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);',
+    'z-index: 1000;',
+    'transition: all 0.3s ease;',
+    'display: flex;',
+    'align-items: center;',
+    'justify-content: center;',
+    'padding: 0;'
+  ].join(' ');
+  button.onmouseover = function() { this.style.transform = 'scale(1.05)'; this.style.boxShadow = '0 6px 20px rgba(37, 211, 102, 0.5)'; };
+  button.onmouseout = function() { this.style.transform = 'scale(1)'; this.style.boxShadow = '0 4px 12px rgba(37, 211, 102, 0.4)'; };
+  document.body.appendChild(button);
 
-// Formatação do telefone
-document.querySelector('input[type="tel"]').addEventListener('input', function(e) {
-    let value = e.target.value.replace(/\D/g, '');
-    if (value.length > 11) value = value.slice(0, 11);
-    
-    if (value.length > 2) {
-        value = `(${value.slice(0,2)}) ${value.slice(2)}`;
-    }
-    if (value.length > 10) {
-        value = `${value.slice(0,10)}-${value.slice(10)}`;
-    }
-    
-    e.target.value = value;
-});
+  var modal = document.createElement('div');
+  modal.style.cssText = [
+    'display: none;',
+    'position: fixed;',
+    'bottom: 100px;',
+    'right: 20px;',
+    'width: 380px;',
+    'height: 600px;',
+    'background: rgba(0,0,0,0.7);',
+    'z-index: 1001;',
+    'border-radius: 12px;',
+    'overflow: hidden;'
+  ].join(' ');
 
-// Função para formatar e abrir WhatsApp
-async function openWhatsApp(nome, telefone, mensagem) {
-    const mensagemWhatsApp = `Olá! Me chamo ${nome}.\nTelefone: ${telefone}${mensagem ? `\n\n${mensagem}` : ''}`;
-    
-    // Enviar dados para o Discord
-    const webhookUrl = 'https://discord.com/api/webhooks/1356766178495955284/4yvQWHpDJ8ExZMsoA8xlJ0rOrsrPhJJ6GVOJjvSKBzF5CuTJLBEjYwve-D3550sOjYtn';
-    
-    try {
-        await fetch(webhookUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                content: `**Novo Contato via Formulário**\n\n**Nome:** ${nome}\n**Telefone:** ${telefone}${mensagem ? `\n**Mensagem:** ${mensagem}` : ''}`
-            })
-        });
-    } catch (error) {
-        console.error('Erro ao enviar dados para o Discord:', error);
+  var chatContainer = document.createElement('div');
+  chatContainer.style.cssText = [
+    'background: #efeae2;',
+    'width: 100%;',
+    'height: 100%;',
+    'border-radius: 12px;',
+    'display: flex;',
+    'flex-direction: column;',
+    'box-shadow: 0 8px 25px rgba(0,0,0,0.3);',
+    'overflow: hidden;',
+    'font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;'
+  ].join(' ');
+  modal.appendChild(chatContainer);
+
+  var header = document.createElement('div');
+  header.style.cssText = [
+    'background: linear-gradient(135deg, #075e54, #128c7e);',
+    'color: white;',
+    'padding: 12px 16px;',
+    'display: flex;',
+    'align-items: center;',
+    'gap: 12px;',
+    'box-shadow: 0 2px 4px rgba(0,0,0,0.1);'
+  ].join(' ');
+
+  var profilePic = document.createElement('img');
+  profilePic.src = 'https://img.icons8.com/ios-filled/50/ffffff/whatsapp.png';
+  profilePic.style.cssText = 'width: 40px; height: 40px;';
+  profilePic.onerror = function() { this.style.display = 'none'; };
+
+  var headerInfo = document.createElement('div');
+  headerInfo.innerHTML = '<div style="font-weight: 600; font-size: 16px;">Atendimento Dra. Pâmella</div><div style="font-size: 13px; opacity: 0.8;">Online</div>';
+
+  header.appendChild(profilePic);
+  header.appendChild(headerInfo);
+
+  var closeIcon = document.createElement('span');
+  closeIcon.innerHTML = '×';
+  closeIcon.style.cssText = 'margin-left: auto; font-size: 24px; cursor: pointer; opacity: 0.7;';
+  closeIcon.onclick = function() { modal.style.display = 'none'; };
+  header.appendChild(closeIcon);
+
+  chatContainer.appendChild(header);
+
+  var messages = document.createElement('div');
+  messages.style.cssText = [
+    'flex: 1;',
+    'padding: 12px;',
+    'overflow-y: auto;',
+    'display: flex;',
+    'flex-direction: column;',
+    'gap: 8px;'
+  ].join(' ');
+
+  var welcomeMsg = document.createElement('div');
+  welcomeMsg.style.cssText = [
+    'background: #ffffff;',
+    'max-width: 80%;',
+    'padding: 12px 16px;',
+    'border-radius: 0 18px 18px 18px;',
+    'align-self: flex-start;',
+    'box-shadow: 0 1px 2px rgba(0,0,0,0.1);',
+    'font-size: 14px; line-height: 1.4;'
+  ].join(' ');
+  welcomeMsg.innerHTML = '<strong>Dra. Pâmella Fernandes</strong><br>Olá! 👋 Que bom ter você aqui! Para agendar sua consulta ou tirar dúvidas sobre procedimentos, por favor, informe seu nome e telefone abaixo.';
+  messages.appendChild(welcomeMsg);
+
+  chatContainer.appendChild(messages);
+
+  var inputContainer = document.createElement('div');
+  inputContainer.style.cssText = [
+    'background: #f0f0f0;',
+    'padding: 12px;',
+    'border-top: 1px solid #ddd;',
+    'display: flex;',
+    'flex-direction: column;',
+    'gap: 8px;'
+  ].join(' ');
+
+  var nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.placeholder = 'Seu nome completo';
+  nameInput.style.cssText = [
+    'padding: 12px 16px;',
+    'border: 1px solid #ccc;',
+    'border-radius: 20px;',
+    'font-size: 16px;',
+    'outline: none;'
+  ].join(' ');
+
+  var phoneInput = document.createElement('input');
+  phoneInput.type = 'tel';
+  phoneInput.placeholder = '(xx) xxxxx-xxxx';
+  phoneInput.maxLength = 15;
+  phoneInput.style.cssText = [
+    'padding: 12px 16px;',
+    'border: 1px solid #ccc;',
+    'border-radius: 20px;',
+    'font-size: 16px;',
+    'outline: none;'
+  ].join(' ');
+
+  phoneInput.onkeyup = function() {
+    var v = this.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.substring(0, 11);
+    if (v.length <= 11) {
+      if (v.length <= 2) this.value = '(' + v;
+      else if (v.length <= 6) this.value = '(' + v.substring(0,2) + ') ' + v.substring(2);
+      else this.value = '(' + v.substring(0,2) + ') ' + v.substring(2,7) + '-' + v.substring(7);
     }
-    
-    // Disparar evento de Lead no Meta Pixel com Advanced Match
+  };
+
+  var messageInput = document.createElement('textarea');
+  messageInput.placeholder = 'Mensagem (opcional)';
+  messageInput.rows = 2;
+  messageInput.style.cssText = [
+    'padding: 12px 16px;',
+    'border: 1px solid #ccc;',
+    'border-radius: 20px;',
+    'font-size: 16px;',
+    'outline: none;',
+    'resize: none;',
+    'font-family: inherit;'
+  ].join(' ');
+
+  var sendBtn = document.createElement('button');
+  sendBtn.textContent = 'Enviar';
+  sendBtn.style.cssText = [
+    'background: #25D366;',
+    'color: white;',
+    'border: none;',
+    'padding: 12px 24px;',
+    'border-radius: 20px;',
+    'cursor: pointer;',
+    'font-size: 16px;',
+    'font-weight: 500;',
+    'transition: background 0.2s;'
+  ].join(' ');
+  sendBtn.onmouseover = function() { this.style.background = '#128C7E'; };
+  sendBtn.onmouseout = function() { this.style.background = '#25D366'; };
+
+  inputContainer.appendChild(nameInput);
+  inputContainer.appendChild(phoneInput);
+  inputContainer.appendChild(messageInput);
+  inputContainer.appendChild(sendBtn);
+
+  chatContainer.appendChild(inputContainer);
+
+  document.body.appendChild(modal);
+
+  // Função para verificar e preencher dados fake
+  function fillFakeData() {
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('fake_data')) {
+      nameInput.value = 'João Silva';
+      // Preencher telefone já formatado
+      phoneInput.value = '(31) 99999-9999';
+      messageInput.value = 'Gostaria de agendar uma consulta para avaliação de procedimento estético.';
+    }
+  }
+
+  // Função global para abrir o modal
+  window.openWhatsAppModal = function() {
+    modal.style.display = 'block'; 
+    messages.scrollTop = messages.scrollHeight;
+    fillFakeData();
+  };
+
+  button.onclick = function() { 
+    window.openWhatsAppModal();
+  };
+
+  modal.onclick = function(e) { if (e.target === modal) modal.style.display = 'none'; };
+
+  sendBtn.onclick = function() {
+    var name = nameInput.value.trim();
+    var phone = phoneInput.value.replace(/\D/g, '');
+    var message = messageInput.value.trim();
+    if (!name || phone.length !== 11) return messages.appendChild(createBubble('Preencha nome e telefone (11 dígitos)!', 'self', true));
+
+    var userMsgText = 'Nome: ' + name + '<br>Telefone: ' + phone;
+    if (message) userMsgText += '<br>Mensagem: ' + message;
+    var userMsg = createBubble(userMsgText, 'self');
+    messages.appendChild(userMsg);
+    messages.scrollTop = messages.scrollHeight;
+
+    var urlParamsStr = window.location.search.substring(1);
+    var urlParams = {};
+    if (urlParamsStr) {
+      urlParamsStr.split('&').forEach(function(param) {
+        var parts = param.split('=');
+        if (parts[1]) urlParams[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+      });
+    }
+
+    var analytics = {
+      names: {
+        source: urlParams['utm_source'] || '',
+        medium: urlParams['utm_medium'] || '',
+        campaign: urlParams['utm_campaign'] || '',
+        adset: urlParams['adset'] || '',
+        ad: urlParams['ad'] || '',
+        term: urlParams['utm_term'] || ''
+      },
+      ids: {
+        campaign_id: parseInt(urlParams['campaign_id'], 10) || 0,
+        adset_id: parseInt(urlParams['adset_id'], 10) || 0,
+        ad_id: parseInt(urlParams['ad_id'], 10) || 0,
+        gclid: urlParams['gclid'] || '',
+        gbraid: urlParams['gbraid'] || '',
+        wbraid: urlParams['wbraid'] || ''
+      }
+    };
+
+    var payload = {
+      userId: "5531990005148",
+      name: name,
+      phone: parseInt(phone, 10),
+      message: message || '',
+      analytics: analytics
+    };
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://hkdk.events/e2kjhgiy0xb7k4', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        // Disparar evento de Lead no Meta Pixel
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'Lead', {
+            content_name: 'Formulário de Contato - Modal',
+            content_category: 'Contato',
+            value: 1,
+            currency: 'BRL',
+            phone: phone,
+            external_id: phone
+          });
+        }
+
+        // Disparar evento no Google Analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_submission', {
+            'event_category': 'Contact',
+            'event_label': 'WhatsApp Modal Form',
+            'value': 1
+          });
+
+          // Disparar conversão do Google Ads
+          gtag('event', 'conversion', {
+            'send_to': 'AW-17210029785/lead',
+            'value': 1,
+            'currency': 'BRL'
+          });
+        }
+
+        var successMsg = createBubble('Mensagem enviada! Abrindo WhatsApp...', 'other');
+        messages.appendChild(successMsg);
+        messages.scrollTop = messages.scrollHeight;
+        setTimeout(function() {
+          var whatsappText = 'Olá, meu nome é ' + name + ' e meu telefone é ' + phone;
+          if (message) whatsappText += '\n\n' + message;
+          window.open('https://wa.me/5531990005148?text=' + encodeURIComponent(whatsappText));
+          modal.style.display = 'none';
+        }, 1500);
+      }
+    };
+    xhr.onerror = function() { messages.appendChild(createBubble('Erro ao enviar. Tente novamente.', 'self', true)); };
+    xhr.send(JSON.stringify(payload));
+
+    nameInput.value = phoneInput.value = messageInput.value = '';
+  };
+
+  function createBubble(text, type, error) {
+    var bubble = document.createElement('div');
+    var bg = type === 'self' ? (error ? '#ffcccc' : '#dcf8c6') : '#ffffff';
+    var radius = type === 'self' ? '18px 18px 0 18px' : '0 18px 18px 18px';
+    var align = type === 'self' ? 'flex-end' : 'flex-start';
+    bubble.style.cssText = [
+      'background: ' + bg + ';',
+      'max-width: 80%;',
+      'padding: 12px 16px;',
+      'border-radius: ' + radius + ';',
+      'align-self: ' + align + ';',
+      'box-shadow: 0 1px 2px rgba(0,0,0,0.1);',
+      'font-size: 14px; line-height: 1.4;'
+    ].join(' ');
+    bubble.innerHTML = (error ? '<strong style="color: #d00;">Erro: </strong>' : '') + text;
+    return bubble;
+  }
+})();
+
+// Tracking para botão "Agende sua Consulta"
+document.querySelector('.cta-button')?.addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  // Disparar evento de Lead no Meta Pixel
+  if (typeof fbq !== 'undefined') {
     fbq('track', 'Lead', {
-        content_name: 'Formulário de Contato',
-        content_category: 'Contato',
-        value: 1,
-        currency: 'BRL',
-        phone: telefone.replace(/\D/g, ''),
-        external_id: telefone.replace(/\D/g, ''),
-        client_ip_address: '{{client_ip_address}}',
-        client_user_agent: '{{client_user_agent}}',
-        fbc: '{{fbc}}',
-        fbp: '{{fbp}}',
-        em: '{{em}}'
+      content_name: 'Botão Agende sua Consulta',
+      content_category: 'Contato',
+      value: 1,
+      currency: 'BRL'
     });
+  }
 
-    // Disparar evento no Google Analytics
-    gtag('event', 'form_submission', {
-        'event_category': 'Contact',
-        'event_label': 'WhatsApp Form',
-        'value': 1
+  // Disparar evento no Google Analytics
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'whatsapp_click', {
+      'event_category': 'Contact',
+      'event_label': 'CTA Button - Agende sua Consulta',
+      'value': 1
     });
 
     // Disparar conversão do Google Ads
     gtag('event', 'conversion', {
-        'send_to': 'AW-17210029785/lead',
-        'value': 1,
-        'currency': 'BRL'
+      'send_to': 'AW-17210029785/lead',
+      'value': 1,
+      'currency': 'BRL'
     });
-
-    window.open(`https://wa.me/5531993991313?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
-}
-
-// Envio do formulário para WhatsApp
-document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nome = this.querySelector('input[type="text"]').value;
-    const telefone = this.querySelector('input[type="tel"]').value.replace(/\D/g, '');
-    const mensagem = this.querySelector('textarea').value.trim();
-    
-    openWhatsApp(nome, telefone, mensagem);
-    this.reset();
-});
-
-// Botão WhatsApp no formulário
-document.querySelector('.whatsapp-form-button').addEventListener('click', function() {
-    const form = document.getElementById('contact-form');
-    const nome = form.querySelector('input[type="text"]').value;
-    const telefone = form.querySelector('input[type="tel"]').value.replace(/\D/g, '');
-    const mensagem = form.querySelector('textarea').value.trim();
-    
-    if (!nome || !telefone) {
-        alert('Por favor, preencha pelo menos o nome e telefone antes de ir para o WhatsApp.');
-        return;
-    }
-    
-    openWhatsApp(nome, telefone, mensagem);
-});
-
-// WhatsApp Button Scroll Control
-const whatsappButton = document.querySelector('.whatsapp-button');
-
-window.addEventListener('scroll', function() {
-    if (window.scrollY > 200) {
-        whatsappButton.classList.add('show');
-    } else {
-        whatsappButton.classList.remove('show');
-    }
-});
-
-// Smooth scroll for WhatsApp button
-document.querySelector('.whatsapp-button').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector('#contato').scrollIntoView({
-        behavior: 'smooth'
-    });
-
-    // Show message
-    const message = document.querySelector('.whatsapp-message');
-    message.classList.add('show');
-
-    // Hide message after 5 seconds
-    setTimeout(() => {
-        message.classList.remove('show');
-    }, 5000);
+  }
+  
+  // Abrir o modal do WhatsApp
+  if (typeof window.openWhatsAppModal === 'function') {
+    window.openWhatsAppModal();
+  }
 }); 
