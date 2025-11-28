@@ -502,15 +502,57 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           });
         }
 
-        var successMsg = createBubble('Mensagem enviada! Abrindo WhatsApp...', 'other');
-        messages.appendChild(successMsg);
-        messages.scrollTop = messages.scrollHeight;
-        setTimeout(function() {
-          var whatsappText = 'Olá, meu nome é ' + name + ' e meu telefone é ' + phone;
-          if (message) whatsappText += '\n\n' + message;
-          window.open('https://wa.me/5531990005148?text=' + encodeURIComponent(whatsappText));
+        var whatsappText = 'Olá, meu nome é ' + name + ' e meu telefone é ' + phone;
+        if (message) whatsappText += '\n\n' + message;
+        
+        // Criar mensagem de sucesso com botão CTA
+        var successContainer = document.createElement('div');
+        successContainer.style.cssText = [
+          'background: #ffffff;',
+          'max-width: 80%;',
+          'padding: 16px;',
+          'border-radius: 0 18px 18px 18px;',
+          'align-self: flex-start;',
+          'box-shadow: 0 1px 2px rgba(0,0,0,0.1);',
+          'font-size: 14px;',
+          'line-height: 1.4;'
+        ].join(' ');
+        
+        successContainer.innerHTML = '<strong>Dra. Pâmella Fernandes</strong><br>Perfeito! Suas informações foram recebidas. Clique no botão abaixo para continuar no WhatsApp:';
+        
+        var whatsappButton = document.createElement('button');
+        whatsappButton.textContent = 'Abrir WhatsApp';
+        whatsappButton.style.cssText = [
+          'background: #25D366;',
+          'color: white;',
+          'border: none;',
+          'padding: 12px 24px;',
+          'border-radius: 20px;',
+          'cursor: pointer;',
+          'font-size: 16px;',
+          'font-weight: 600;',
+          'margin-top: 12px;',
+          'width: 100%;',
+          'transition: background 0.2s;',
+          'display: flex;',
+          'align-items: center;',
+          'justify-content: center;',
+          'gap: 8px;'
+        ].join(' ');
+        
+        whatsappButton.innerHTML = '<i class="fab fa-whatsapp" style="font-size: 18px;"></i> Abrir WhatsApp';
+        
+        whatsappButton.onmouseover = function() { this.style.background = '#128C7E'; };
+        whatsappButton.onmouseout = function() { this.style.background = '#25D366'; };
+        
+        whatsappButton.onclick = function() {
+          window.open('https://wa.me/5531990005148?text=' + encodeURIComponent(whatsappText), '_blank');
           modal.style.display = 'none';
-        }, 1500);
+        };
+        
+        successContainer.appendChild(whatsappButton);
+        messages.appendChild(successContainer);
+        messages.scrollTop = messages.scrollHeight;
       }
     };
     xhr.onerror = function() { messages.appendChild(createBubble('Erro ao enviar. Tente novamente.', 'self', true)); };
