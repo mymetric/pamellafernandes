@@ -557,7 +557,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         successContainer.appendChild(whatsappButton);
         messages.appendChild(successContainer);
         messages.scrollTop = messages.scrollHeight;
-      }
     }).catch(function() {
       messages.appendChild(createBubble('Erro ao enviar. Tente novamente.', 'self', true));
     });
