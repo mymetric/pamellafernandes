@@ -461,19 +461,23 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       }
     };
 
-    var payload = {
-      userId: "5531990005148",
-      name: name,
-      phone: parseInt(phone, 10),
-      message: message || '',
-      analytics: analytics
-    };
+    var formData = new URLSearchParams();
+    formData.append('nome', name);
+    formData.append('telefone', phone);
+    formData.append('email', '');
+    formData.append('utm_source', analytics.names.source);
+    formData.append('utm_medium', analytics.names.medium);
+    formData.append('utm_campaign', analytics.names.campaign);
+    formData.append('utm_term', analytics.names.term);
+    formData.append('utm_content', analytics.names.ad);
+    formData.append('gclid', analytics.ids.gclid);
+    formData.append('observacao', message || '');
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://hkdk.events/e2kjhgiy0xb7k4', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
+    fetch('https://script.google.com/macros/s/AKfycbxo9q5f_t9A-3xbLWq3_njkHgOGm35Mx7qSqvZiw35DWOcehGp4Rmc9io092qyQqVTChA/exec', {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    }).then(function() {
         // Disparar evento de Lead no Meta Pixel
         if (typeof fbq !== 'undefined') {
           fbq('track', 'Lead', {
@@ -554,9 +558,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         messages.appendChild(successContainer);
         messages.scrollTop = messages.scrollHeight;
       }
-    };
-    xhr.onerror = function() { messages.appendChild(createBubble('Erro ao enviar. Tente novamente.', 'self', true)); };
-    xhr.send(JSON.stringify(payload));
+    }).catch(function() {
+      messages.appendChild(createBubble('Erro ao enviar. Tente novamente.', 'self', true));
+    });
 
     nameInput.value = phoneInput.value = messageInput.value = '';
   };
