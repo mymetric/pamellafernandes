@@ -500,7 +500,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
           // Disparar conversão do Google Ads
           gtag('event', 'conversion', {
-            'send_to': 'AW-17210029785/lead',
+            'send_to': 'AW-17210029785/n36MCM-fzNsaENntsI5A',
             'value': 1,
             'currency': 'BRL'
           });
@@ -607,12 +607,12 @@ document.querySelector('.cta-button')?.addEventListener('click', function(e) {
 
     // Disparar conversão do Google Ads
     gtag('event', 'conversion', {
-      'send_to': 'AW-17210029785/lead',
+      'send_to': 'AW-17210029785/n36MCM-fzNsaENntsI5A',
       'value': 1,
       'currency': 'BRL'
     });
   }
-  
+
   // Abrir o modal do WhatsApp
   if (typeof window.openWhatsAppModal === 'function') {
     window.openWhatsAppModal();
