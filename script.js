@@ -473,38 +473,40 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     formData.append('gclid', analytics.ids.gclid);
     formData.append('observacao', message || '');
 
+    // Disparar evento de Lead no Meta Pixel (síncrono, antes do fetch)
+    if (typeof fbq !== 'undefined') {
+      var eventId = 'lead_' + phone + '_' + Date.now();
+      fbq('track', 'Lead', {
+        content_name: 'Formulário de Contato - Modal',
+        content_category: 'Contato',
+        value: 1,
+        currency: 'BRL',
+        phone: phone,
+        external_id: phone
+      }, { eventID: eventId });
+    }
+
+    // Disparar evento no Google Analytics (síncrono, antes do fetch)
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_submission', {
+        'event_category': 'Contact',
+        'event_label': 'WhatsApp Modal Form',
+        'value': 1
+      });
+
+      // Disparar conversão do Google Ads
+      gtag('event', 'conversion', {
+        'send_to': 'AW-17210029785/n36MCM-fzNsaENntsI5A',
+        'value': 1,
+        'currency': 'BRL'
+      });
+    }
+
     fetch('https://script.google.com/macros/s/AKfycbxo9q5f_t9A-3xbLWq3_njkHgOGm35Mx7qSqvZiw35DWOcehGp4Rmc9io092qyQqVTChA/exec', {
       method: 'POST',
       body: formData,
       mode: 'no-cors'
     }).then(function() {
-        // Disparar evento de Lead no Meta Pixel
-        if (typeof fbq !== 'undefined') {
-          fbq('track', 'Lead', {
-            content_name: 'Formulário de Contato - Modal',
-            content_category: 'Contato',
-            value: 1,
-            currency: 'BRL',
-            phone: phone,
-            external_id: phone
-          });
-        }
-
-        // Disparar evento no Google Analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'form_submission', {
-            'event_category': 'Contact',
-            'event_label': 'WhatsApp Modal Form',
-            'value': 1
-          });
-
-          // Disparar conversão do Google Ads
-          gtag('event', 'conversion', {
-            'send_to': 'AW-17210029785/n36MCM-fzNsaENntsI5A',
-            'value': 1,
-            'currency': 'BRL'
-          });
-        }
 
         var whatsappText = 'Olá, meu nome é ' + name + ' e meu telefone é ' + phone;
         if (message) whatsappText += '\n\n' + message;
